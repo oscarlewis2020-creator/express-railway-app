@@ -86,12 +86,15 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(
   session({
-    secret: "my secret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: store,
   }),
 );
+// store.on("error", function (error) {
+//   console.log("Session store error:", error);
+// });
 
 app.use(flash());
 
