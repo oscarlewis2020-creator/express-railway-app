@@ -47,7 +47,10 @@ const fileStorage = multer.diskStorage({
     cb(null, "images");
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + "-" + file.originalname);
+    cb(
+      null,
+      new Date().toISOString().replace(/:/g, "-") + "-" + file.originalname,
+    );
   },
 });
 
@@ -70,10 +73,11 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
 
-const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, "access.log"),
-  { flag: "a" },
-);
+const accessLogStream =
+  process.env.NODE_ENV === "production"
+    ? process.stdout
+    : fs.createWriteStream(path.join(__dirname, "access.log"), { flag: "a" });
+
 app.use(helmet());
 app.use(compression());
 app.use(morgan("combined", { stream: accessLogStream }));
