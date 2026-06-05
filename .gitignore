@@ -1,0 +1,5 @@
+node_modules
+enviroment_variables.env
+server.cert
+server.key
+access.log
